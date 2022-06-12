@@ -6,10 +6,18 @@ interface IRequest {
 }
 
 class ListAllUsersUseCase {
-  constructor(private usersRepository: IUsersRepository) {}
+  constructor(private usersRepository: IUsersRepository) { }
 
   execute({ user_id }: IRequest): User[] {
-    // Complete aqui
+    if (
+      !(
+        this.usersRepository.findById(user_id) &&
+        this.usersRepository.findById(user_id).admin
+      )
+    ) {
+      throw new Error("Wihtout autorization");
+    }
+    return this.usersRepository.list();
   }
 }
 
